@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "particles-bg": "^2.5.5",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-parallax-tilt": "^1.7.285"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
