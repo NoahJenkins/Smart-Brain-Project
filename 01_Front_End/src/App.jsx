@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { Component } from 'react'
 import Navigation from './Components/Navigation/Navigation.jsx'
+import Logo from './Components/Logo/logo.jsx'
 import 'tachyons'
 
 class App extends Component {
@@ -9,8 +10,8 @@ class App extends Component {
     return (
       <div classname='App'>
         <Navigation />
-        {/* <Logo />
-        <ImageLinkForm />
+        <Logo />
+        {/* <ImageLinkForm />
         <FaceRecognition /> */}
       </div>
     );
