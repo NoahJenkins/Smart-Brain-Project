@@ -3,6 +3,7 @@ import './App.css'
 import { Component } from 'react'
 import Navigation from './Components/Navigation/Navigation.jsx'
 import Logo from './Components/Logo/logo.jsx'
+import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm.jsx'
 import 'tachyons'
 
 class App extends Component {
@@ -11,8 +12,8 @@ class App extends Component {
       <div classname='App'>
         <Navigation />
         <Logo />
-        {/* <ImageLinkForm />
-        <FaceRecognition /> */}
+        <ImageLinkForm />
+        {/* <FaceRecognition /> */}
       </div>
     );
   }
