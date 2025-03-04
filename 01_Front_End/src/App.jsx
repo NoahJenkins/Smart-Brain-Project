@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { Component } from 'react'
 import Navigation from './Components/Navigation/Navigation.jsx'
-
+import 'tachyons'
 
 class App extends Component {
   render () {
