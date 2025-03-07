@@ -156,9 +156,9 @@ class App extends Component {
       <div className='App'>
         <ParticlesBG className="particles" type="cobweb" bg={true} color="FFFFFF" />
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Logo />
         { route === 'home'
           ? <div>
-              <Logo />
               <Rank />
               <ImageLinkForm 
                 onInputChange={this.onInputChange} 
