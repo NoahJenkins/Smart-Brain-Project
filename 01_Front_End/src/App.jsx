@@ -6,6 +6,7 @@ import Logo from './Components/Logo/logo.jsx'
 import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm.jsx'
 import Rank from './Components/Rank/Rank.jsx'
 import FaceRecognition from './Components/FaceRecognition/FaceRecognition.jsx'
+import SignIn from './Components/SignIn/SignIn.jsx'
 import 'tachyons'
 import ParticlesBG from 'particles-bg'
 
@@ -15,8 +16,21 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
-      boxes: []  // Change from box to boxes (array), this will alow is to store multipel boxes (faces)
+      boxes: [],  // Change from box to boxes (array), this will alow is to store multipel boxes (faces)
+      route: 'signin', // Add this to track the current screen: 'signin', 'register', 'home'
+      isSignedIn: false // Add this to track authentication status
     }
+  }
+
+  // Add this method to handle route changes
+  onRouteChange = (route) => {
+    if (route === 'signout') {
+      this.setState({ isSignedIn: false });
+      route = 'signin';
+    } else if (route === 'home') {
+      this.setState({ isSignedIn: true });
+    }
+    this.setState({ route: route });
   }
 
   calculateFaceLocations = (data) => {
@@ -136,14 +150,25 @@ class App extends Component {
   };
 
   render () {
+    const { isSignedIn, imageUrl, route, boxes } = this.state;
     return (
       <div className='App'>
         <ParticlesBG className="particles" type="cobweb" bg={true} color="FFFFFF" />
-        <Navigation />
-        <Logo />
-        <Rank/>
-        <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-        <FaceRecognition boxes={this.state.boxes} imageUrl={this.state.imageUrl} />
+        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        { route === 'home'
+          ? <div>
+              <Logo />
+              <Rank />
+              <ImageLinkForm 
+                onInputChange={this.onInputChange} 
+                onButtonSubmit={this.onButtonSubmit}
+              />
+              <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
+            </div>
+          : (
+              <SignIn onRouteChange={this.onRouteChange} />
+            )
+        }
       </div>
     );
   }
