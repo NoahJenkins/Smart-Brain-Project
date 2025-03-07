@@ -15,26 +15,33 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
-      box: ''
+      boxes: []  // Change from box to boxes (array)
     }
   }
 
-  calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+  calculateFaceLocations = (data) => {
+    if (!data || !data.outputs || !data.outputs[0].data.regions) {
+      return [];
+    }
+    
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
-    }
-  
+    
+    // Map all regions to bounding boxes
+    return data.outputs[0].data.regions.map(region => {
+      const clarifaiFace = region.region_info.bounding_box;
+      return {
+        leftCol: clarifaiFace.left_col * width,
+        topRow: clarifaiFace.top_row * height,
+        rightCol: width - (clarifaiFace.right_col * width),
+        bottomRow: height - (clarifaiFace.bottom_row * height)
+      };
+    });
   };
 
-  displayFaceBox = (box) => {
-    this.setState({box: box});
+  displayFaceBoxes = (boxes) => {
+    this.setState({boxes: boxes});
   }
 
   onInputChange = (event) => {
@@ -114,16 +121,17 @@ class App extends Component {
               });
           });
 
-          const box = this.calculateFaceLocation(result);
-          this.displayFaceBox(box);
+          // Use the new multi-face methods
+          const boxes = this.calculateFaceLocations(result);
+          this.displayFaceBoxes(boxes);
         } else {
           console.log('No faces detected in the image or invalid response structure');
-          this.setState({box: null}); // Reset the box when no faces are detected
+          this.setState({boxes: []}); // Reset boxes to empty array
         }
       })
       .catch(error => {
         console.log('error', error);
-        this.setState({box: null}); // Reset the box on error
+        this.setState({boxes: []}); // Reset boxes to empty array
       });
   };
 
@@ -135,7 +143,7 @@ class App extends Component {
         <Logo />
         <Rank/>
         <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+        <FaceRecognition boxes={this.state.boxes} imageUrl={this.state.imageUrl} />
       </div>
     );
   }
