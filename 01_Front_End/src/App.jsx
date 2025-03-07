@@ -7,6 +7,7 @@ import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm.jsx'
 import Rank from './Components/Rank/Rank.jsx'
 import FaceRecognition from './Components/FaceRecognition/FaceRecognition.jsx'
 import SignIn from './Components/SignIn/SignIn.jsx'
+import Register from './Components/Register/Register.jsx'
 import 'tachyons'
 import ParticlesBG from 'particles-bg'
 
@@ -166,7 +167,9 @@ class App extends Component {
               <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
             </div>
           : (
-              <SignIn onRouteChange={this.onRouteChange} />
+              route === 'register'
+              ? <Register onRouteChange={this.onRouteChange} />
+              : <SignIn onRouteChange={this.onRouteChange} />
             )
         }
       </div>
