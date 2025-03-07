@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "clarifai": "^2.9.1",
-    "global": "^4.4.0"
+    "clarifai": "^2.9.1"
   }
 }
