@@ -5,6 +5,7 @@ import Navigation from './Components/Navigation/Navigation.jsx'
 import Logo from './Components/Logo/logo.jsx'
 import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm.jsx'
 import Rank from './Components/Rank/Rank.jsx'
+import FaceRecognition from './Components/FaceRecognition/FaceRecognition.jsx'
 import 'tachyons'
 import ParticlesBG from 'particles-bg'
 
@@ -12,7 +13,8 @@ class App extends Component {
   constructor () {
     super()
     this.state = {
-      input: ''
+      input: '',
+      imageUrl: ''
     }
   }
 
@@ -21,6 +23,8 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
+    this.setState({ imageUrl: this.state.input });
+
     if (!this.state.input) {
       console.log('Please enter an image URL');
       return;
@@ -109,7 +113,7 @@ class App extends Component {
         <Logo />
         <Rank/>
         <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-        {/* <FaceRecognition /> */}
+        <FaceRecognition imageUrl={this.state.imageUrl} />
       </div>
     );
   }
