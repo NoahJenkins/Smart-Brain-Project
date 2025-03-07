@@ -15,7 +15,7 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
-      boxes: []  // Change from box to boxes (array)
+      boxes: []  // Change from box to boxes (array), this will alow is to store multipel boxes (faces)
     }
   }
 
