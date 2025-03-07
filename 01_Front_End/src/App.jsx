@@ -9,6 +9,21 @@ import 'tachyons'
 import ParticlesBG from 'particles-bg'
 
 class App extends Component {
+  constructor () {
+    super()
+    this.state = {
+      input: ''
+    }
+  }
+
+  onInputChange = (event) => {
+    console.log(event.target.value)
+  }
+
+  onButtonSumbmit = () => {
+    console.log('click')
+  }
+  
   render () {
     return (
       <div className='App'>
