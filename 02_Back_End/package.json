@@ -1,0 +1,12 @@
+{
+  "name": "02_back_end",
+  "version": "1.0.0",
+  "description": "back end for my smart brain project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --watch server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
