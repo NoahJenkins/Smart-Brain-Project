@@ -23,6 +23,12 @@ class App extends Component {
     }
   }
 
+  componentDidMount () {
+    fetch('http://localhost:3000/')
+      .then(response => response.json())
+      .then(console.log) // console.log will automatically receive the data from the previous .then
+  };
+
   // Add this method to handle route changes
   onRouteChange = (route) => {
     if (route === 'signout') {
