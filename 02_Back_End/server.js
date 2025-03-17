@@ -70,8 +70,9 @@ app.post('/signin', (req, res) => {
     }
     
     if (result) {
-      // Passwords match!
-      return res.json('success');
+      // Return user data without password
+      const { password, ...userWithoutPassword } = user;
+      return res.json(userWithoutPassword);
     } else {
       // Passwords don't match
       return res.json('fail');

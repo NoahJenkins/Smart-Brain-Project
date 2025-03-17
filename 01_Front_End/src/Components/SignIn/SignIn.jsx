@@ -24,8 +24,9 @@ const SignIn = ({ onRouteChange, loadUser }) => {
         })
         .then(response => response.json())
         .then(data => {
-            if (data === 'success') {
-                // If successful, load user and change route to home
+            if (data && data.id) {
+                // Load the user data and change route
+                loadUser(data);
                 onRouteChange('home');
             } else {
                 setError('Invalid credentials');
