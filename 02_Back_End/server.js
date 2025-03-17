@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const e = require('express');
+const bcrypt = require('bcryptjs');
 const app = express();
 
 app.use(bodyParser.json());
@@ -22,6 +22,11 @@ const database = {
       password: 'bananas',
       entries: 0,
       joined: new Date()
+    },
+    {
+      id: '987',
+      hash: '',
+      email: "john@gmail.com"
     }
   ]};
 
@@ -39,14 +44,18 @@ app.post('/signin', (req,res) => {
 
 app.post('/register', (req,res) => {
   const { email, name, password } = req.body;
-  database.users.push({
-    id: '125',
-    name: name,
-    email: email,
-    password: password,
-    entries: 0,
-    joined: new Date()
-  })
+  bcrypt.hash(password, 10, function(err, hash) {
+    console.log(hash);
+
+    database.users.push({
+      id: '125',
+      name: name,
+      email: email,
+      password: password,
+      entries: 0,
+      joined: new Date()
+  });
+});
   res.json(database.users[database.users.length-1]);
 });
 
@@ -76,6 +85,8 @@ app.post('/image', (req,res) => {
     }
   })
 });
+
+
 
 app.listen(3000, () => {
   console.log('Server is listening on port 3000');
