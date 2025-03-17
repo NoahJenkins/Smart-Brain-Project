@@ -32,34 +32,82 @@ const database = {
     }
   ]};
 
+// Hash existing passwords
+database.users.forEach(user => {
+  if (user.password && typeof user.password === 'string' && !user.password.startsWith('$2')) {
+    const plainTextPassword = user.password;
+    bcrypt.hash(plainTextPassword, 10, (err, hash) => {
+      if (!err) {
+        user.password = hash;
+      }
+    });
+  }
+});
+
 app.get('/', (req,res) => {
     res.send(database.users);
 });
 
-app.post('/signin', (req,res) => {
+app.post('/signin', (req, res) => {
+  const { email, password } = req.body;
   
-  if (req.body.email === database.users[0].email && req.body.password === database.users[0].password) {
-    res.json('success');
-  } else {
-    res.json('fail');
+  // Input validation
+  if (!email || !password) {
+    return res.status(400).json('fail');
   }
-});
-
-app.post('/register', (req,res) => {
-  const { email, name, password } = req.body;
-  bcrypt.hash(password, 10, function(err, hash) {
-    console.log(hash);
-
-    database.users.push({
-      id: '125',
-      name: name,
-      email: email,
-      password: password,
-      entries: 0,
-      joined: new Date()
+  
+  // Find user by email
+  const user = database.users.find(user => user.email === email);
+  
+  if (!user) {
+    return res.status(400).json('fail');
+  }
+  
+  // Compare password with stored hash
+  bcrypt.compare(password, user.password, (err, result) => {
+    if (err) {
+      return res.status(500).json('fail');
+    }
+    
+    if (result) {
+      // Passwords match!
+      return res.json('success');
+    } else {
+      // Passwords don't match
+      return res.json('fail');
+    }
   });
 });
-  res.json(database.users[database.users.length-1]);
+
+app.post('/register', (req, res) => {
+  const { email, name, password } = req.body;
+  
+  // Input validation
+  if (!email || !name || !password) {
+    return res.status(400).json('Incorrect form submission');
+  }
+  
+  // Hash password properly with bcrypt
+  bcrypt.hash(password, 10, (err, hash) => {
+    if (err) {
+      return res.status(500).json('Error during registration');
+    }
+    
+    const newUser = {
+      id: '125', // In a real app, generate a unique ID
+      name: name,
+      email: email,
+      password: hash, // Store the hash, not plaintext
+      entries: 0,
+      joined: new Date()
+    };
+    
+    database.users.push(newUser);
+    
+    // Return user without exposing password hash
+    const { password, ...userWithoutPassword } = newUser;
+    return res.json(userWithoutPassword);
+  });
 });
 
 app.get('/profile/:id', (req,res) => {
