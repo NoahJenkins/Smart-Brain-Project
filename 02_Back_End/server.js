@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const app = express();
+const fetch = require('node-fetch');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -138,7 +139,45 @@ app.post('/image', (req,res) => {
   })
 });
 
+app.post('/clarifai-face-detect', (req, res) => {
+  const { imageUrl } = req.body;
+  
+  // Clarifai API configuration
+  const PAT = '2cec7c9fc6be46a4a114a85bbb74d9b0';
+  const USER_ID = 'xvjbvkg3apmd';
+  const APP_ID = 'my-first-application-4yrkpc';
+  const MODEL_ID = 'face-detection';
+  
+  const raw = JSON.stringify({
+    "user_app_id": {
+      "user_id": USER_ID,
+      "app_id": APP_ID
+    },
+    "inputs": [
+      {
+        "data": {
+          "image": {
+            "url": imageUrl
+          }
+        }
+      }
+    ]
+  });
 
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Key ' + PAT
+    },
+    body: raw
+  };
+  
+  fetch(`https://api.clarifai.com/v2/models/${MODEL_ID}/outputs`, requestOptions)
+    .then(clarifaiResponse => clarifaiResponse.json())
+    .then(data => res.json(data))
+    .catch(err => res.status(500).json('Error calling Clarifai API'));
+});
 
 app.listen(3000, () => {
   console.log('Server is listening on port 3000');
