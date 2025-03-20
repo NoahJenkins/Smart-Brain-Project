@@ -43,7 +43,20 @@ class App extends Component {
   // Add this method to handle route changes
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({ isSignedIn: false });
+      // Reset all user data and image-related state when signing out
+      this.setState({ 
+        isSignedIn: false,
+        imageUrl: '',  // Clear the image URL
+        input: '',     // Clear the input field
+        boxes: [],     // Clear face detection boxes
+        user: {
+          id: 0,
+          name: '',
+          email: '',
+          entries: 0,
+          joined: ''
+        }
+      });
       route = 'signin';
     } else if (route === 'home') {
       this.setState({ isSignedIn: true });
@@ -90,7 +103,7 @@ class App extends Component {
     
     console.log('click')
     
-    // Call our backend instead of Clarifai directly
+    // Call our backend instead of Clarifai directly, this will allow us to protect our API key and support CORS
     fetch('http://localhost:3000/clarifai-face-detect', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -108,7 +121,7 @@ class App extends Component {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-              id: Number(this.state.user.id)  // Ensure ID is a number
+              id: Number(this.state.user.id)  // Ensure ID is a number so it is compatible with the backend with the database
             })
           })
           .then(response => response.json())
