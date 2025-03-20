@@ -21,7 +21,7 @@ class App extends Component {
       route: 'signin', // Add this to track the current screen: 'signin', 'register', 'home'
       isSignedIn: false, // Add this to track authentication status
       user: {
-        id: '',
+        id: 0,  // Change from empty string to 0
         name: '',
         email: '',
         entries: 0,
@@ -32,7 +32,7 @@ class App extends Component {
 
   loadUser = (data) => {
     this.setState({user: {
-      id: data.id,
+      id: Number(data.id),  // Ensure ID is a number
       name: data.name,
       email: data.email,
       entries: data.entries,
@@ -108,7 +108,7 @@ class App extends Component {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-              id: this.state.user.id
+              id: Number(this.state.user.id)  // Ensure ID is a number
             })
           })
           .then(response => response.json())
