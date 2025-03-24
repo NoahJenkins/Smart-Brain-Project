@@ -1,155 +1,100 @@
 # Smart Brain Project
 
-The Smart Brain Project is a web application that allows users to register, sign in, and detect faces in uploaded images. This README explains the architecture and functionality of the application.
+The Smart Brain Project is a web application that allows users to register, sign in, and detect faces in uploaded images. This project showcases a full-stack application with React frontend, Node.js backend, and SQLite database.
 
-## 1. Frontend (React.js)
+## 📚 Project Overview
 
-The frontend is built using React.js, a popular JavaScript library for building user interfaces.
+This project demonstrates the integration of multiple technologies to create a functional face detection application:
 
-### Key Components
+- **Interactive UI**: Register, sign in, and detect faces in images
+- **Face Detection**: Leverages Clarifai's AI API for accurate face detection
+- **User Management**: Register new users and track usage statistics
+- **Database Storage**: Persist user data using SQLite
 
-- **App.jsx**: The main component that manages application state, including:
-  - User authentication state
-  - Image URL handling
-  - Face detection boxes
-  - Routing between pages
+## 📁 Project Structure
 
-- **Navigation**: Handles user navigation and sign-out functionality
+The project is divided into three main components:
 
-- **Logo**: Displays the application logo using the Tilt animation library
+1. **Frontend** (`/01_Front_End`)
+   - React.js application
+   - User interface components
+   - State management
+   - API integration
 
-- **ImageLinkForm**: Provides a form for users to input image URLs for face detection
+2. **Backend** (`/02_Back_End`)
+   - Node.js & Express server
+   - RESTful API endpoints
+   - Authentication logic
+   - Clarifai API integration
 
-- **Rank**: Displays the current user's usage statistics
+3. **Database** (`/03_Database`) 
+   - SQLite database file
+   - User data storage
 
-- **FaceRecognition**: Renders the image with bounding boxes around detected faces
+## 🚀 Getting Started
 
-- **SignIn/Register**: Form components for user authentication
+Follow these steps to set up and run the project locally:
 
-### State Management
+### Backend Setup
 
-- Uses React Hooks (useState) for component-level state
-- Main App component maintains global state and passes data via props
-- Handles form submissions and API calls to the backend
+1. Navigate to the backend directory:
+   ```bash
+   cd 02_Back_End
+   ```
 
-### User Flow
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-1. Users start at the sign-in page
-2. They can either sign in or navigate to registration
-3. Once authenticated, users can submit image URLs
-4. The application displays the image with face detection boxes
-5. User entry count increases with each successful detection
+3. Start the server:
+   ```bash
+   npm start
+   ```
+   
+   The server will run on port 3000 and automatically create the database file if it doesn't exist.
 
-## 2. Backend (Node.js & Express)
+### Frontend Setup
 
-The backend is built with Node.js and Express, providing RESTful API endpoints for the frontend.
+1. Open a new terminal and navigate to the frontend directory:
+   ```bash
+   cd 01_Front_End
+   ```
 
-### Server Setup
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-- **Express**: Handles HTTP requests and routing
-- **CORS**: Enables cross-origin requests from the frontend
-- **Body Parser**: Parses JSON request bodies
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-### API Endpoints
+4. Access the application in your browser at the URL shown in your terminal (typically http://localhost:5173)
 
-- **GET /** - Lists all users (development/testing purpose)
-- **POST /signin** - Authenticates users and returns user data
-- **POST /register** - Creates new user accounts
-- **GET /profile/:id** - Retrieves user profile data
-- **POST /image** - Updates user entry count
-- **POST /clarifai-face-detect** - Proxies requests to Clarifai API for face detection
+## 📝 Detailed Documentation
 
-### Security Features
+For more detailed information about each component:
 
-- Passwords are hashed using bcrypt before storage
-- Input validation to prevent malformed requests
+- [Frontend Documentation](./01_Front_End/README.md) - Details on components, state management, and UI features
+- [Backend Documentation](./02_Back_End/README.md) - API endpoints, controllers, and database interactions
+
+## 🔒 Security Features
+
+- Password hashing with bcrypt
 - Parameterized SQL queries to prevent injection attacks
+- Input validation to prevent malformed requests
+- Secure API key handling
 
-### External API Integration
+## 🧩 Main Features
 
-- Integrates with Clarifai's face detection API
-- Handles API responses and forwards relevant data to the frontend
-
-## 3. Database (SQLite)
-
-The application uses SQLite, a file-based relational database for data persistence.
-
-### Database Structure
-
-- Located in the 03_Database folder as `smart-brain.db`
-- Single `users` table with the following schema:
-  ```sql
-  CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    entries INTEGER DEFAULT 0,
-    joined DATETIME DEFAULT CURRENT_TIMESTAMP
-  )
-  ```
-
-### Database Operations
-
-- **READ**: Retrieves user data for authentication and profile display
-  ```javascript
-  db.get('SELECT * FROM users WHERE email = ?', [email], callback)
-  ```
-
-- **CREATE**: Stores new user information during registration
-  ```javascript
-  db.run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', 
-    [name, email, hash], callback)
-  ```
-
-- **UPDATE**: Increments the entry count when users submit images
-  ```javascript
-  db.run('UPDATE users SET entries = entries + 1 WHERE id = ?', [id], callback)
-  ```
-
-### Data Flow
-
-1. **Registration**: 
-   - Frontend collects user data and sends to backend
-   - Backend hashes password and stores in database
-   - New user ID is returned to frontend
-
-2. **Authentication**:
-   - Frontend sends credentials to backend
-   - Backend verifies against database records
-   - User data (excluding password) is returned on success
-
-3. **Face Detection**:
-   - User submits image URL
-   - Backend proxies request to Clarifai API
-   - Database updates entry count
-   - Frontend displays results and updated count
-
-### Security Considerations
-
-- Database queries use parameterized statements to prevent SQL injection
-- Passwords are never stored in plain text
-- IDs are explicitly converted to numbers to ensure type consistency
-- Database file can be backed up or migrated as needed
+- User registration and authentication
+- Face detection in images via URL
+- Multiple face detection capability
+- User statistics tracking
+- Responsive and animated UI
 
 ---
 
-## Running the Application
-
-1. Start the backend server:
-   ```bash
-   cd 02_Back_End
-   npm install
-   node server.js
-   ```
-
-2. Start the frontend development server:
-   ```bash
-   cd 01_Front_End
-   npm install
-   npm start
-   ```
-
-3. Access the application at http://localhost:3000
-
-The database file will be automatically created in the 03_Database directory when the server starts for the first time.
+Happy coding! 👩‍💻👨‍💻
