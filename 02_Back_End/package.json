@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --watch server.js"
+    "start": "node --watch server.js",
+    "check-env": "node scripts/check-env.js",
+    "prestart": "npm run check-env"
   },
   "author": "",
   "license": "ISC",
@@ -13,7 +15,9 @@
     "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^2.7.0",
+    "sqlite3": "^5.1.7"
   }
 }

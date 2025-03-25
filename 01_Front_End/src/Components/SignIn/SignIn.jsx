@@ -26,6 +26,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
         .then(data => {
             if (data && data.id) {
                 // Load the user data and change route
+                data.id = Number(data.id);  // Convert ID to number
                 loadUser(data);
                 onRouteChange('home');
             } else {

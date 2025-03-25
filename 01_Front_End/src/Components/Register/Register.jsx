@@ -31,6 +31,7 @@ const Register = ({ onRouteChange, loadUser }) => {
         .then(response => response.json())
         .then(user => {
             if (user.id) {
+                user.id = Number(user.id);  // Convert ID to number
                 loadUser(user);
                 onRouteChange('home');
             } else {

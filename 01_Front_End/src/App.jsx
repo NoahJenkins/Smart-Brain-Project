@@ -21,7 +21,7 @@ class App extends Component {
       route: 'signin', // Add this to track the current screen: 'signin', 'register', 'home'
       isSignedIn: false, // Add this to track authentication status
       user: {
-        id: '',
+        id: 0,  // Change from empty string to 0
         name: '',
         email: '',
         entries: 0,
@@ -32,7 +32,7 @@ class App extends Component {
 
   loadUser = (data) => {
     this.setState({user: {
-      id: data.id,
+      id: Number(data.id),  // Ensure ID is a number
       name: data.name,
       email: data.email,
       entries: data.entries,
@@ -43,7 +43,20 @@ class App extends Component {
   // Add this method to handle route changes
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({ isSignedIn: false });
+      // Reset all user data and image-related state when signing out
+      this.setState({ 
+        isSignedIn: false,
+        imageUrl: '',  // Clear the image URL
+        input: '',     // Clear the input field
+        boxes: [],     // Clear face detection boxes
+        user: {
+          id: 0,
+          name: '',
+          email: '',
+          entries: 0,
+          joined: ''
+        }
+      });
       route = 'signin';
     } else if (route === 'home') {
       this.setState({ isSignedIn: true });
@@ -90,7 +103,7 @@ class App extends Component {
     
     console.log('click')
     
-    // Call our backend instead of Clarifai directly
+    // Call our backend instead of Clarifai directly, this will allow us to protect our API key and support CORS
     fetch('http://localhost:3000/clarifai-face-detect', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -108,7 +121,7 @@ class App extends Component {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-              id: this.state.user.id
+              id: Number(this.state.user.id)  // Ensure ID is a number so it is compatible with the backend with the database
             })
           })
           .then(response => response.json())
