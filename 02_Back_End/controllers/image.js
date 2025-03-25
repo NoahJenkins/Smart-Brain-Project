@@ -28,10 +28,10 @@ const handleImage = (req, res, db) => {
 const handleApiCall = (req, res) => {
   const { imageUrl } = req.body;
   
-  // Clarifai API configuration
-  const PAT = '2cec7c9fc6be46a4a114a85bbb74d9b0';
-  const USER_ID = 'xvjbvkg3apmd';
-  const APP_ID = 'my-first-application-4yrkpc';
+  // Clarifai API configuration using environment variables
+  const PAT = process.env.CLARIFAI_PAT;
+  const USER_ID = process.env.CLARIFAI_USER_ID;
+  const APP_ID = process.env.CLARIFAI_APP_ID;
   const MODEL_ID = 'face-detection';
   
   const raw = JSON.stringify({

@@ -1,3 +1,5 @@
+require('dotenv').config();
+console.log('Clarifai PAT:', process.env.CLARIFAI_PAT ? 'Loaded successfully' : 'Not loaded');
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
