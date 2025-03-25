@@ -19,12 +19,15 @@ The Smart Brain Project frontend is a React application that provides a user int
 ## 🚀 Setup Instructions
 
 ### Prerequisites
-- Node.js (v14 or higher)
+- Node.js (v18 or higher)
 - npm or yarn
 
 ### Installation Steps
 
 1. Clone the repository or download the project files
+   ```bash
+   git clone https://github.com/yourusername/Smart-Brain-Project.git
+   ```
 
 2. Navigate to the frontend directory:
    ```bash
@@ -42,6 +45,12 @@ The Smart Brain Project frontend is a React application that provides a user int
    ```
 
 5. Open your browser and navigate to `http://localhost:5173` (or the port shown in your terminal)
+
+### Environment Configuration
+Create a `.env` file in the frontend root directory with the following variables:
+```
+VITE_API_URL=http://localhost:3000
+```
 
 ### Important Note
 The frontend expects the backend server to be running on `http://localhost:3000`. Make sure to start the backend server before using the application.
@@ -73,7 +82,7 @@ The frontend expects the backend server to be running on `http://localhost:3000`
 
 ### App.jsx
 
-The `App.jsx` file is the main component that orchestrates the entire application. It uses a class-based approach to manage state and component lifecycle.
+The `App.jsx` file is the main component that orchestrates the entire application. It manages the application state and handles component interactions.
 
 #### Key Features:
 - **State Management**: Maintains application state including:
@@ -87,7 +96,7 @@ The `App.jsx` file is the main component that orchestrates the entire applicatio
 - **Key Methods**:
   - `loadUser`: Updates user state with data from backend
   - `onRouteChange`: Handles navigation between screens
-  - `calculateFaceLocations`: Computes bounding box coordinates from Clarifai API response
+  - `calculateFaceLocations`: Computes bounding box coordinates from API response
   - `displayFaceBoxes`: Updates state with face detection boxes
   - `onInputChange`: Updates input state when the URL field changes
   - `onButtonSubmit`: Triggers face detection process and API calls
@@ -164,7 +173,7 @@ Located in `src/Components/Register/Register.jsx`, this component provides the u
 
 ## 🔄 State Management
 
-The application uses React's class component state system. Key state management features include:
+The application uses React's state management system. Key features include:
 
 - Centralized state in the App component
 - Props passed down to child components
@@ -186,8 +195,9 @@ The frontend communicates with the backend through several endpoints:
 
 - `/signin`: User authentication
 - `/register`: User account creation
-- `/image`: Update entry count
-- `/clarifai-face-detect`: Proxy to Clarifai API for face detection
+- `/profile/:id`: Get user profile information
+- `/image`: Update entry count and process image detection
+- `/imageurl`: Handle image URL processing
 
 All API requests use the Fetch API with appropriate headers and error handling.
 
@@ -208,6 +218,30 @@ The color scheme follows a gradient theme with purple and gold accents, creating
 - **Particle Background**: Dynamic animated background using particles-bg
 - **Responsive Design**: Adapts to different screen sizes
 - **Error Handling**: User-friendly error messages for API failures and validation issues
+- **Security**: Implementation of secure authentication practices
+
+## 🔒 Security Considerations
+
+- Passwords are never stored in the frontend
+- JWT tokens are used for session management
+- API calls use HTTPS for secure data transmission
+- Input validation is performed on both client and server side
+
+## 🧪 Testing
+
+To run tests for the frontend application:
+
+```bash
+npm test
+```
+
+## 📱 Browser Compatibility
+
+The application has been tested and works on:
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
 
 ---
 
