@@ -67,9 +67,56 @@ This README provides detailed documentation for the backend of the Smart Brain P
 
 ### Environment Configuration
 
-- The application uses default configurations that work out of the box
-- The Clarifai API key is included in the `image.js` controller
-- SQLite database will be stored at `../03_Database/smart-brain.db`
+The application uses environment variables to securely store API keys and configuration.
+
+#### Setting Up Environment Variables
+
+1. **Automatic Environment Setup**:
+   The application includes an environment checking script that runs automatically when you start the server. 
+   It will:
+   - Check if a `.env` file exists
+   - Create one with placeholder values if it doesn't exist
+   - Alert you to update the values with your actual credentials
+   
+   You can also run this check manually:
+   ```bash
+   npm run check-env
+   ```
+
+2. **Manual Environment Setup**:
+   If you prefer to set up the environment manually, create a `.env` file in the `02_Back_End` directory:
+   ```bash
+   touch .env
+   ```
+
+3. **Add your Clarifai API credentials** to the `.env` file:
+   ```
+   CLARIFAI_PAT=your_personal_access_token
+   CLARIFAI_USER_ID=your_user_id
+   CLARIFAI_APP_ID=your_app_id
+   ```
+
+4. **Obtaining Clarifai Credentials**:
+   - Sign up at [Clarifai](https://clarifai.com/signup)
+   - Create a new application in the Clarifai dashboard
+   - Navigate to your account settings to find your Personal Access Token (PAT)
+   - Your User ID and App ID can be found in your application settings
+
+5. **Important Security Notes**:
+   - Never commit your `.env` file to version control
+   - The `.env` file is already included in `.gitignore`
+   - Each developer needs to create their own `.env` file locally
+
+#### Using Environment Variables in Development
+
+Environment variables are automatically loaded when running the server thanks to the `dotenv` package.
+
+#### Environment Variables in Production
+
+For production deployment:
+- Set environment variables according to your hosting provider's instructions
+- Common providers like Heroku, Vercel, or Netlify have specific UI sections for setting environment variables
+- For Docker deployments, use Docker's environment variable functionality
 
 ### Troubleshooting
 
@@ -230,3 +277,44 @@ The server will be available on port 3000 (http://localhost:3000).
 | `/profile/:id` | GET | Get user by ID | - | User object or error |
 | `/image` | POST | Update entry count | `{id}` | Updated entry count or error |
 | `/clarifai-face-detect` | POST | Detect faces | `{imageUrl}` | Clarifai API response |
+
+## Frontend Integration
+
+This backend is designed to work with the Smart Brain frontend. To connect the two:
+
+1. **Configure the frontend API endpoint**:
+   - In your frontend project, set the API base URL to point to this backend
+   - Example (in a React app):
+     ```javascript
+     const API_URL = 'http://localhost:3000';
+     // Then use this base URL for all fetch requests
+     fetch(`${API_URL}/profile/${id}`)
+     ```
+
+2. **CORS configuration**:
+   - The backend is already configured to accept requests from common development origins
+   - If you're hosting the frontend on a different domain, update the CORS configuration in `server.js`
+
+## Testing the API
+
+You can test the API endpoints using various tools:
+
+1. **Using cURL**:
+   ```bash
+   # Test the home endpoint
+   curl http://localhost:3000
+   
+   # Test the sign in endpoint
+   curl -X POST http://localhost:3000/signin -H "Content-Type: application/json" -d '{"email":"test@example.com","password":"password"}'
+```
+
+## 4. Version History
+
+```markdown
+## Version History
+
+- **v1.0.0** (Initial Release):
+  - Basic user authentication (register/login)
+  - Face detection integration with Clarifai API
+  - SQLite database implementation
+  - Entry counting functionality
