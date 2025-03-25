@@ -8,6 +8,10 @@ This README provides detailed documentation for the backend of the Smart Brain P
 02_Back_End/
 ├── package.json        # Project dependencies and scripts
 ├── server.js           # Main server application file
+├── .env                # Environment variables (created automatically)
+├── .env.example        # Example environment variables template
+├── scripts/            # Utility scripts
+│   └── check-env.js    # Environment variables validation script
 └── controllers/        # API endpoint controllers
     ├── home.js         # Home/user listing controller
     ├── image.js        # Image processing and entry updating
@@ -20,7 +24,7 @@ This README provides detailed documentation for the backend of the Smart Brain P
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v18 or higher)
 - npm (v6 or higher)
 - Git (for cloning the repository)
 
@@ -54,7 +58,10 @@ This README provides detailed documentation for the backend of the Smart Brain P
    ```bash
    npm start
    ```
-   This will start the server with auto-restart on file changes using Node's watch mode.
+   This will:
+   - Check for required environment variables
+   - Create an .env file with placeholders if one doesn't exist
+   - Start the server with auto-restart on file changes using Node's watch mode
 
 6. **Verify installation**:
    - The server should be running on port 3000
@@ -251,9 +258,12 @@ CREATE TABLE users (
 ## Security Features
 
 - Password hashing with bcrypt
+- Environment variables for API credentials
+- Automatic environment configuration validation
 - Parameterized SQL queries to prevent SQL injection
 - Input validation across all controllers
 - Error handling to prevent information disclosure
+- .env files excluded from version control
 
 ## Running the Backend
 
