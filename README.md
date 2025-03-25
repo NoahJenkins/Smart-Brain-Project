@@ -35,6 +35,14 @@ The project is divided into three main components:
 
 Follow these steps to set up and run the project locally:
 
+### Prerequisites
+
+Before starting, ensure you have:
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+- A Clarifai account (free tier is sufficient)
+- Git (for cloning the repository)
+
 ### Backend Setup
 
 1. Navigate to the backend directory:
@@ -73,6 +81,20 @@ Follow these steps to set up and run the project locally:
 
 4. Access the application in your browser at the URL shown in your terminal (typically http://localhost:5173)
 
+### Clarifai API Setup
+
+This application uses Clarifai's AI API for face detection. You'll need to:
+
+1. Sign up for a free account at [Clarifai](https://clarifai.com/signup)
+2. Create a new application in the Clarifai dashboard
+3. Get your API credentials (PAT, User ID, and App ID)
+
+The application includes an automatic environment checker that will:
+- Create a `.env` file with placeholder values if one doesn't exist
+- Prompt you to replace these with your actual Clarifai credentials
+
+Or you can manually add your credentials to the `.env` file:
+
 ## 📝 Detailed Documentation
 
 For more detailed information about each component:
@@ -83,9 +105,11 @@ For more detailed information about each component:
 ## 🔒 Security Features
 
 - Password hashing with bcrypt
+- Environment variables for sensitive API credentials
+- Automatic environment configuration checking
 - Parameterized SQL queries to prevent injection attacks
 - Input validation to prevent malformed requests
-- Secure API key handling
+- .env files excluded from version control
 
 ## 🧩 Main Features
 
