@@ -320,9 +320,6 @@ You can test the API endpoints using various tools:
 
 ## 4. Version History
 
-```markdown
-## Version History
-
 - **v1.0.0** (Initial Release):
   - Basic user authentication (register/login)
   - Face detection integration with Clarifai API
