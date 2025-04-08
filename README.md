@@ -38,7 +38,7 @@ Follow these steps to set up and run the project locally:
 ### Prerequisites
 
 Before starting, ensure you have:
-- Node.js (v14 or higher)
+- Node.js (v18 or higher)
 - npm (v6 or higher)
 - A Clarifai account (free tier is sufficient)
 - Git (for cloning the repository)
@@ -121,4 +121,4 @@ For more detailed information about each component:
 
 ---
 
-Happy coding! 👩‍💻👨‍💻
+Happy coding!
