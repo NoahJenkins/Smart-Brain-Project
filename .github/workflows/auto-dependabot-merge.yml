@@ -1,0 +1,60 @@
+name: Auto-approve and merge Dependabot PRs
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  auto-approve-merge:
+    runs-on: ubuntu-latest
+    # Limit this workflow to only run on PRs from Dependabot
+    if: github.actor == 'dependabot[bot]'
+    
+    permissions:
+      pull-requests: write
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          
+      # Frontend tests
+      - name: Install frontend dependencies
+        working-directory: ./01_Front_End
+        run: npm ci
+        
+      - name: Run frontend tests
+        working-directory: ./01_Front_End
+        run: npm run lint
+        
+      # Backend tests
+      - name: Install backend dependencies
+        working-directory: ./02_Back_End
+        run: npm ci
+        
+      - name: Run backend env check
+        working-directory: ./02_Back_End
+        run: npm run check-env
+        
+      # Skip backend tests if they're not configured yet
+      # Replace with actual test command when available
+      - name: Skip backend tests
+        run: echo "Backend tests skipped - not configured"
+        
+      - name: Approve PR
+        run: gh pr review --approve "$PR_URL"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          
+      - name: Enable auto-merge
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
