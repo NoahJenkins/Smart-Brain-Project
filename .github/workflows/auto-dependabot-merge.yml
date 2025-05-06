@@ -1,35 +1,27 @@
 name: Auto-approve and merge Dependabot PRs
 
+# This workflow will automatically approve and merge Dependabot PRs
+# To enable automatic security updates, configure Dependabot in your repository settings:
+# Settings > Security > Code security and analysis > Dependabot security updates > Enable
+
 on:
   pull_request:
     types: [opened, synchronize]
-  dependabot_alert:
-    types: [created]
+  schedule:
+    # Run weekly on Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
 
 jobs:
   auto-approve-merge:
     runs-on: ubuntu-latest
-    # Updated condition to run on both Dependabot PRs and alerts
-    if: github.actor == 'dependabot[bot]' || github.event_name == 'dependabot_alert'
+    # Only run this workflow for Dependabot PRs or scheduled runs
+    if: github.actor == 'dependabot[bot]' || github.event_name == 'schedule'
     
     permissions:
       pull-requests: write
       contents: write
-      security-events: read # Added permission to read security events
       
     steps:
-      # Handle the dependabot alert case by creating a PR
-      - name: Create PR for security vulnerability
-        if: github.event_name == 'dependabot_alert'
-        run: |
-          echo "Processing security alert for ${{ github.event.alert.security_vulnerability.package.name }}"
-          # Create a Dependabot PR for this vulnerability
-          gh api \
-            --method POST \
-            /repos/${{ github.repository }}/dependabot/alerts/${{ github.event.alert.number }}/create-security-update
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
       - name: Checkout code
         uses: actions/checkout@v3
       
@@ -62,6 +54,7 @@ jobs:
       - name: Skip backend tests
         run: echo "Backend tests skipped - not configured"
         
+      # Only try to approve and merge PRs when triggered by pull_request event
       - name: Approve PR
         if: github.event_name == 'pull_request'
         run: gh pr review --approve "$PR_URL"
