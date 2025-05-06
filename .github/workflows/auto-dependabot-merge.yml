@@ -3,18 +3,33 @@ name: Auto-approve and merge Dependabot PRs
 on:
   pull_request:
     types: [opened, synchronize]
+  dependabot_alert:
+    types: [created]
 
 jobs:
   auto-approve-merge:
     runs-on: ubuntu-latest
-    # Limit this workflow to only run on PRs from Dependabot
-    if: github.actor == 'dependabot[bot]'
+    # Updated condition to run on both Dependabot PRs and alerts
+    if: github.actor == 'dependabot[bot]' || github.event_name == 'dependabot_alert'
     
     permissions:
       pull-requests: write
       contents: write
+      security-events: read # Added permission to read security events
       
     steps:
+      # Handle the dependabot alert case by creating a PR
+      - name: Create PR for security vulnerability
+        if: github.event_name == 'dependabot_alert'
+        run: |
+          echo "Processing security alert for ${{ github.event.alert.security_vulnerability.package.name }}"
+          # Create a Dependabot PR for this vulnerability
+          gh api \
+            --method POST \
+            /repos/${{ github.repository }}/dependabot/alerts/${{ github.event.alert.number }}/create-security-update
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Checkout code
         uses: actions/checkout@v3
       
@@ -48,12 +63,14 @@ jobs:
         run: echo "Backend tests skipped - not configured"
         
       - name: Approve PR
+        if: github.event_name == 'pull_request'
         run: gh pr review --approve "$PR_URL"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           
       - name: Enable auto-merge
+        if: github.event_name == 'pull_request'
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
